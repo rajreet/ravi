@@ -9,6 +9,8 @@ import pandas as pd
 from scipy.ndimage import interpolation as inter
 from multiprocessing import Pool, Process, Pipe
 
+from hocr_parse import parse_hocr
+
 from rlsa import rlsa
 
 
@@ -128,40 +130,41 @@ def get_rlsa_output(image, rlsa_param=30, type=HORIZONTAL):
             and bitwise NOT operation
     """
 
-    im_height, im_width = image.shape[:2]
-    split = int(im_height/4)
-    part1,part2,part3,part4 = image[:split,:],image[split:split*2,:],image[2*split:split*3,:],image[3*split:,:]
+    # im_height, im_width = image.shape[:2]
+    # split = int(im_height/4)
+    # part1,part2,part3,part4 = image[:split,:],image[split:split*2,:],image[2*split:split*3,:],image[3*split:,:]
 
-    parent_conn1, child_conn1 = Pipe()
-    parent_conn2, child_conn2 = Pipe()
-    parent_conn3, child_conn3 = Pipe()
-    parent_conn4, child_conn4 = Pipe()
+    # parent_conn1, child_conn1 = Pipe()
+    # parent_conn2, child_conn2 = Pipe()
+    # parent_conn3, child_conn3 = Pipe()
+    # parent_conn4, child_conn4 = Pipe()
 
-    p1 = Process(target=rlsa, args=(child_conn1,part1, True, False, 30)) 
-    p2 = Process(target=rlsa, args=(child_conn2,part2, True, False, 30,)) 
-    p3 = Process(target=rlsa, args=(child_conn3,part3, True, False, 30)) 
-    p4 = Process(target=rlsa, args=(child_conn4,part4, True, False, 30,)) 
+    # p1 = Process(target=rlsa, args=(child_conn1,part1, True, False, 30)) 
+    # p2 = Process(target=rlsa, args=(child_conn2,part2, True, False, 30,)) 
+    # p3 = Process(target=rlsa, args=(child_conn3,part3, True, False, 30)) 
+    # p4 = Process(target=rlsa, args=(child_conn4,part4, True, False, 30,)) 
   
-    p1.start() 
-    p2.start() 
-    p3.start() 
-    p4.start() 
+    # p1.start() 
+    # p2.start() 
+    # p3.start() 
+    # p4.start() 
 
-    outp1 = parent_conn1.recv()
-    outp2 = parent_conn2.recv()
-    outp3 = parent_conn3.recv()
-    outp4 = parent_conn4.recv()
-    # wait until process 1 is finished 
-    p1.join() 
-    # wait until process 2 is finished 
-    p2.join() 
-    # wait until process 3 is finished 
-    p3.join() 
-    # wait until process 4 is finished 
-    p4.join() 
+    # outp1 = parent_conn1.recv()
+    # outp2 = parent_conn2.recv()
+    # outp3 = parent_conn3.recv()
+    # outp4 = parent_conn4.recv()
+    # # wait until process 1 is finished 
+    # p1.join() 
+    # # wait until process 2 is finished 
+    # p2.join() 
+    # # wait until process 3 is finished 
+    # p3.join() 
+    # # wait until process 4 is finished 
+    # p4.join() 
 
-    concat = np.concatenate((outp1,outp2,outp3,outp4))
+    # concat = np.concatenate((outp1,outp2,outp3,outp4))
 
+    concat = rlsa(image,True,False,30)
     # return inverted rlsa image
     return cv2.bitwise_not(concat)
 
@@ -216,7 +219,7 @@ def replaceColourBlocks(process_dict):
 
     for each in contours:
         x, y, w, h = cv2.boundingRect(each)
-        if 0.5 * process_dict["width"] < w < process_dict["width"] and h > 5:
+        if 0.5 * process_dict["image_width"] < w < process_dict["image_width"] and h > 5:
             #print(x,y,w,h)
             binary_image[y: y+h, x: x+w] = inverse_bin[y: y+h, x: x+w]
             showImage("conours", binary_image)
@@ -225,16 +228,16 @@ def replaceColourBlocks(process_dict):
 
 
 def process(process_dict):
-
-    
     replaceColourBlocks(process_dict)
 
     cv2.imwrite("binary.png",process_dict["binary"])
-    pytesseract.run_tesseract('binary.png', 'output_text', lang='eng', extension="hocr")
+    # pytesseract.run_tesseract('binary.png', 'output_text', lang='eng', extension="hocr")
+    process_dict["tesseract_hocr_parsed"] = parse_hocr("output_text.hocr")
+    # print(process_dict["tesseract_hocr_parsed"])
     # subprocess.call("tesseract --dpi 300 binary.png text_output hocr")
 
     process_dict["page_rlsa"] = get_rlsa_output(process_dict["binary"])
-    # showImage("rlsa.png",process_dict["page_rlsa"])
+    # cv2.imwrite("rlsa.png",process_dict["page_rlsa"])
 
     stats, centroids = get_cca_output(process_dict["page_rlsa"])
     block_stats = get_block_stats(stats, centroids)
@@ -243,6 +246,13 @@ def process(process_dict):
     block_stats["bottom"] = block_stats.top + block_stats.height
     process_dict["block_stats"] = block_stats
 
+    # for i in range(len(block_stats)):
+        
+    #     process_dict["image"]=cv2.rectangle(process_dict["image"],(block_stats["left"].iloc[i],block_stats["top"].iloc[i]),(block_stats["right"].iloc[i],block_stats["bottom"].iloc[i]),(0, 0, 0))
+    #     # print(block_stats.iloc[i])
+
+
+    # cv2.imwrite("rect.png",process_dict["image"])
     return process_dict
 
 def main():

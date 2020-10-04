@@ -21,7 +21,7 @@ def iteration(image: numpy.ndarray, value: int) -> numpy.ndarray:
                 count = col  
     return image 
 
-def rlsa(conn,image: numpy.ndarray, horizontal: bool = True, vertical: bool = True, value: int = 0) -> numpy.ndarray:
+def rlsa(image: numpy.ndarray, horizontal: bool = True, vertical: bool = True, value: int = 0) -> numpy.ndarray:
     """
     rlsa(RUN LENGTH SMOOTHING ALGORITHM) is to extract the block-of-text or the Region-of-interest(ROI) from the
     document binary Image provided. Must pass binary image of ndarray type.
@@ -51,7 +51,7 @@ def rlsa(conn,image: numpy.ndarray, horizontal: bool = True, vertical: bool = Tr
         print('Image must be an numpy ndarray and must be in binary')
         image = None
     
-    conn.send(image)
-    conn.close()
+    # conn.send(image)
+    # conn.close()
     return image
 
