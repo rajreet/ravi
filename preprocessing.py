@@ -222,7 +222,7 @@ def replaceColourBlocks(process_dict):
         if 0.5 * process_dict["image_width"] < w < process_dict["image_width"] and h > 5:
             #print(x,y,w,h)
             binary_image[y: y+h, x: x+w] = inverse_bin[y: y+h, x: x+w]
-            showImage("conours", binary_image)
+            # showImage("conours", binary_image)
 
     process_dict["binary"] = lineRemove(binary_image)
 
@@ -231,13 +231,18 @@ def process(process_dict):
     replaceColourBlocks(process_dict)
 
     cv2.imwrite("binary.png",process_dict["binary"])
+
     # pytesseract.run_tesseract('binary.png', 'output_text', lang='eng', extension="hocr")
+    os.system("tesseract binary.png output_text hocr")
+
+    print("OCR Done")
+
     process_dict["tesseract_hocr_parsed"] = parse_hocr("output_text.hocr")
     # print(process_dict["tesseract_hocr_parsed"])
-    # subprocess.call("tesseract --dpi 300 binary.png text_output hocr")
+    
 
     process_dict["page_rlsa"] = get_rlsa_output(process_dict["binary"])
-    # cv2.imwrite("rlsa.png",process_dict["page_rlsa"])
+    cv2.imwrite("rlsa.png",process_dict["page_rlsa"])
 
     stats, centroids = get_cca_output(process_dict["page_rlsa"])
     block_stats = get_block_stats(stats, centroids)
@@ -246,13 +251,14 @@ def process(process_dict):
     block_stats["bottom"] = block_stats.top + block_stats.height
     process_dict["block_stats"] = block_stats
 
-    # for i in range(len(block_stats)):
+    for i in range(len(block_stats)):
         
-    #     process_dict["image"]=cv2.rectangle(process_dict["image"],(block_stats["left"].iloc[i],block_stats["top"].iloc[i]),(block_stats["right"].iloc[i],block_stats["bottom"].iloc[i]),(0, 0, 0))
-    #     # print(block_stats.iloc[i])
+        if(block_stats["height"].iloc[i]> 30):
+            process_dict["image"]=cv2.rectangle(process_dict["image"],(block_stats["left"].iloc[i],block_stats["top"].iloc[i]),(block_stats["right"].iloc[i],block_stats["bottom"].iloc[i]),(0, 0, 0))
+        # print(block_stats.iloc[i])
 
 
-    # cv2.imwrite("rect.png",process_dict["image"])
+    cv2.imwrite("rect.png",process_dict["image"])
     return process_dict
 
 def main():

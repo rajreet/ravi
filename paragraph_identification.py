@@ -13,7 +13,7 @@ def getStartLine(para_dict,margin=10):
         count=0
 
         for i in range(len(block_stats)):
-            if(start<=block_stats["left"].iloc[i] <=start+margin):
+            if(start<=block_stats["left"].iloc[i] <=start+margin and block_stats["height"].iloc[i]>para_dict["min_block_height"]):
                 count+=1
 
         if(maxcount<count):
@@ -33,6 +33,7 @@ def getText(process_dict, min_width=15, max_width=100):
     """
     para_dict = process_dict
     
+    para_dict["min_block_height"]=30
 
     block_stats = para_dict["block_stats"]
     para_dict["len_blockstat"] = len(block_stats)
