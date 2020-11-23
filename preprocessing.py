@@ -1,5 +1,6 @@
 import os
 import subprocess
+import copy
 
 from pytesseract import pytesseract
 from PIL import Image
@@ -230,10 +231,17 @@ def replaceColourBlocks(process_dict):
 def process(process_dict):
     replaceColourBlocks(process_dict)
 
-    cv2.imwrite("binary.png",process_dict["binary"])
+    kernel = np.ones((2,2),np.uint8)
 
+    opening = cv2.morphologyEx(cv2.bitwise_not(process_dict["binary"]), cv2.MORPH_OPEN, kernel)
+
+    # cv2.imwrite("opening.png",cv2.bitwise_not(opening))
+
+    process_dict["binary"]=cv2.bitwise_not(opening)
+    cv2.imwrite("binary.png",process_dict["binary"])
+    
     # pytesseract.run_tesseract('binary.png', 'output_text', lang='eng', extension="hocr")
-    os.system("tesseract binary.png output_text hocr")
+    os.system("tesseract --dpi 300 binary.png output_text hocr")
 
     print("OCR Done")
 
@@ -241,8 +249,8 @@ def process(process_dict):
     # print(process_dict["tesseract_hocr_parsed"])
     
 
-    process_dict["page_rlsa"] = get_rlsa_output(process_dict["binary"])
-    cv2.imwrite("rlsa.png",process_dict["page_rlsa"])
+    process_dict["page_rlsa"] = get_rlsa_output(copy.deepcopy(process_dict["binary"]))
+    cv2.imwrite("rlsa.png",cv2.bitwise_not(process_dict["page_rlsa"]))
 
     stats, centroids = get_cca_output(process_dict["page_rlsa"])
     block_stats = get_block_stats(stats, centroids)
@@ -251,14 +259,21 @@ def process(process_dict):
     block_stats["bottom"] = block_stats.top + block_stats.height
     process_dict["block_stats"] = block_stats
 
+    process_dict["top_page"]=10000000
+    process_dict["bottom_page"]=0
+
+    process_dict["box"]=copy.deepcopy(process_dict["image"])
     for i in range(len(block_stats)):
         
-        if(block_stats["height"].iloc[i]> 30):
-            process_dict["image"]=cv2.rectangle(process_dict["image"],(block_stats["left"].iloc[i],block_stats["top"].iloc[i]),(block_stats["right"].iloc[i],block_stats["bottom"].iloc[i]),(0, 0, 0))
+        if(150 > block_stats["height"].iloc[i]> 30):
+            process_dict["top_page"]=min(process_dict["top_page"],block_stats["top"].iloc[i])
+            process_dict["bottom_page"]=max(process_dict["bottom_page"],block_stats["bottom"].iloc[i])
+
+            process_dict["box"]=cv2.rectangle(process_dict["box"],(block_stats["left"].iloc[i],block_stats["top"].iloc[i]),(block_stats["right"].iloc[i],block_stats["bottom"].iloc[i]),(0, 0, 0),thickness=2)
         # print(block_stats.iloc[i])
 
 
-    cv2.imwrite("rect.png",process_dict["image"])
+    cv2.imwrite("rect.png",process_dict["box"])
     return process_dict
 
 def main():

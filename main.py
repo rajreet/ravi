@@ -16,7 +16,9 @@ def main():
     process_dict["image_height"] = image.shape[0]
     # print(process_dict["image_height"])
     process_dict["image_width"] = image.shape[1]
-    # retval, threshold = cv2.threshold(image,150,255,cv2.THRESH_BINARY)
+    # retval, thresh = cv2.threshold(image,127,255,cv2.THRESH_BINARY)
+
+    # cv2.imwrite("binary_before.png",thresh)
 
     threshold = cv2.adaptiveThreshold(image,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,201,15)
     # blur = cv2.GaussianBlur(image,(7,7),0)
