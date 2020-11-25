@@ -6,6 +6,8 @@ from preprocessing import process
 from paragraph_identification import getParagraphs
 from paragraph_extraction import extract
 
+import time
+
 def main():
     
     process_dict={}
@@ -29,10 +31,15 @@ def main():
 
     process_dict=process(process_dict)
     print("Image preprocssing done.")
-    para_dict = getParagraphs(process_dict)
-    extract(para_dict)
+    # para_dict = getParagraphs(process_dict)
+    # extract(para_dict)
 
     # showImage("binary.png",process_dict["binary"])
 
 if __name__ == "__main__":
+    start_time = time.time()
     main()
+    print()
+    print("============================== Runtime Elapsed =======================================")
+    print(f"{time.time()-start_time} Seconds")
+    print("======================================================================================")

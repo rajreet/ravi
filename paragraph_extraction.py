@@ -9,7 +9,7 @@ def extract(para_dict):
 
     for i in range(len(block_stats)):
 
-        if(block_stats["height"].iloc[i] > para_dict["min_block_height"] and i):
+        if(block_stats["height"].iloc[i] > 20 and i):
 
             for words in para_dict["tesseract_hocr_parsed"]:
                 word_x0, word_y0, word_x1, word_y1 = words
@@ -19,7 +19,7 @@ def extract(para_dict):
                 top=block_stats["top"].iloc[i]
                 bottom= block_stats["bottom"].iloc[i]
 
-                if(word_x0>= para_dict["para_start"]-5 and word_x0 >=left-10 and word_x1 <= right+10 and word_y0 >= top-10 and word_y1 <= bottom +10):
+                if(word_x0 >=left-10 and word_x1 <= right+10 and word_y0 >= top-10 and word_y1 <= bottom +10):
                     para_text+=para_dict["tesseract_hocr_parsed"][words]+" "
 
 

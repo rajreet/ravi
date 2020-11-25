@@ -10,6 +10,7 @@ import pandas as pd
 from scipy.ndimage import interpolation as inter
 from multiprocessing import Pool, Process, Pipe
 
+from cropping import getLeftLine,getRightLine
 from hocr_parse import parse_hocr
 
 from rlsa import rlsa
@@ -230,24 +231,13 @@ def replaceColourBlocks(process_dict):
 
 def process(process_dict):
     replaceColourBlocks(process_dict)
-
     kernel = np.ones((2,2),np.uint8)
-
     opening = cv2.morphologyEx(cv2.bitwise_not(process_dict["binary"]), cv2.MORPH_OPEN, kernel)
 
     # cv2.imwrite("opening.png",cv2.bitwise_not(opening))
 
     process_dict["binary"]=cv2.bitwise_not(opening)
     cv2.imwrite("binary.png",process_dict["binary"])
-    
-    # pytesseract.run_tesseract('binary.png', 'output_text', lang='eng', extension="hocr")
-    os.system("tesseract --dpi 300 binary.png output_text hocr")
-
-    print("OCR Done")
-
-    process_dict["tesseract_hocr_parsed"] = parse_hocr("output_text.hocr")
-    # print(process_dict["tesseract_hocr_parsed"])
-    
 
     process_dict["page_rlsa"] = get_rlsa_output(copy.deepcopy(process_dict["binary"]))
     cv2.imwrite("rlsa.png",cv2.bitwise_not(process_dict["page_rlsa"]))
@@ -261,11 +251,12 @@ def process(process_dict):
 
     process_dict["top_page"]=10000000
     process_dict["bottom_page"]=0
+    process_dict["min_block_height"]=30
 
     process_dict["box"]=copy.deepcopy(process_dict["image"])
     for i in range(len(block_stats)):
         
-        if(150 > block_stats["height"].iloc[i]> 30):
+        if(150 > block_stats["height"].iloc[i]> process_dict["min_block_height"]):
             process_dict["top_page"]=min(process_dict["top_page"],block_stats["top"].iloc[i])
             process_dict["bottom_page"]=max(process_dict["bottom_page"],block_stats["bottom"].iloc[i])
 
@@ -274,6 +265,22 @@ def process(process_dict):
 
 
     cv2.imwrite("rect.png",process_dict["box"])
+
+    process_dict["para_start"] = getLeftLine(process_dict,5)
+    process_dict["para_end"] = getRightLine(process_dict,5)
+
+    print(f"Paragraph start at X-coordinate : {process_dict['para_start']}")
+    print(f"Paragraph end at X-coordinate : {process_dict['para_end']}")
+    
+    process_dict["cropped"]=process_dict["binary"][process_dict["top_page"]-10:process_dict["bottom_page"],process_dict["para_start"]-10:process_dict["para_end"]+10]
+
+    cv2.imwrite("cropped.png",process_dict["cropped"])
+
+    os.system("tesseract --dpi 300 cropped.png output_para")
+    print("OCR Done")
+
+    process_dict["tesseract_hocr_parsed"] = parse_hocr("output_text.hocr")
+    
     return process_dict
 
 def main():
