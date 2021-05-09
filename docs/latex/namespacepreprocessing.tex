@@ -1,0 +1,206 @@
+\hypertarget{namespacepreprocessing}{}\doxysection{preprocessing Namespace Reference}
+\label{namespacepreprocessing}\index{preprocessing@{preprocessing}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacepreprocessing_a075248132f8c77300b7b8209d654d98a}{show\+Image}} (winname, image, width=700, height=700)
+\item 
+def \mbox{\hyperlink{namespacepreprocessing_a21e3905a9b155a5c162039cccfa61c92}{line\+Remove}} (src, line\+\_\+colour=\mbox{\hyperlink{namespacepreprocessing_a39da2ac7a2542b44a02e1f55a9ad0151}{WHITE}})
+\item 
+def \mbox{\hyperlink{namespacepreprocessing_ab37eddd2ab27ea7e937fc598842c4647}{get\+\_\+rlsa\+\_\+output}} (image, rlsa\+\_\+param=30, type=\mbox{\hyperlink{namespacepreprocessing_a54455fe31f9a7980c6f866ef8bc9782d}{HORIZONTAL}})
+\item 
+def \mbox{\hyperlink{namespacepreprocessing_a389349312263697dbd431543ff02d938}{get\+\_\+cca\+\_\+output}} (image)
+\item 
+def \mbox{\hyperlink{namespacepreprocessing_afdf5d1bc01b8fc9872aba0f0ecca3872}{get\+\_\+block\+\_\+stats}} (stats, centroids)
+\item 
+def \mbox{\hyperlink{namespacepreprocessing_a515109f3d818660c2b9dd6e482c790b3}{replace\+Colour\+Blocks}} (process\+\_\+dict)
+\item 
+def \mbox{\hyperlink{namespacepreprocessing_ab3eeaa14e6c207f39c7fee6f9d3183ba}{process}} (process\+\_\+dict)
+\item 
+def \mbox{\hyperlink{namespacepreprocessing_aa9e44785ac3d7efdf420736e919caa31}{main}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+tuple \mbox{\hyperlink{namespacepreprocessing_a96abc9c5b3bab46d4b47c4f373b22913}{BLACK}} = (0, 0, 0)
+\item 
+tuple \mbox{\hyperlink{namespacepreprocessing_a39da2ac7a2542b44a02e1f55a9ad0151}{WHITE}} = (255, 255, 255)
+\item 
+tuple \mbox{\hyperlink{namespacepreprocessing_a54455fe31f9a7980c6f866ef8bc9782d}{HORIZONTAL}} = (1, 0)
+\item 
+tuple \mbox{\hyperlink{namespacepreprocessing_a8cb0a604f00e2ef3d7afce5e349ccb64}{VERTICAL}} = (0, 1)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacepreprocessing_afdf5d1bc01b8fc9872aba0f0ecca3872}\label{namespacepreprocessing_afdf5d1bc01b8fc9872aba0f0ecca3872}} 
+\index{preprocessing@{preprocessing}!get\_block\_stats@{get\_block\_stats}}
+\index{get\_block\_stats@{get\_block\_stats}!preprocessing@{preprocessing}}
+\doxysubsubsection{\texorpdfstring{get\_block\_stats()}{get\_block\_stats()}}
+{\footnotesize\ttfamily def preprocessing.\+get\+\_\+block\+\_\+stats (\begin{DoxyParamCaption}\item[{}]{stats,  }\item[{}]{centroids }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Get block stats in a pandas DataFrams
+
+Parameters:
+    stats ():
+
+    centroids ():
+Returns:
+    block_stats ():
+\end{DoxyVerb}
+ 
+
+Definition at line 187 of file preprocessing.\+py.
+
+\mbox{\Hypertarget{namespacepreprocessing_a389349312263697dbd431543ff02d938}\label{namespacepreprocessing_a389349312263697dbd431543ff02d938}} 
+\index{preprocessing@{preprocessing}!get\_cca\_output@{get\_cca\_output}}
+\index{get\_cca\_output@{get\_cca\_output}!preprocessing@{preprocessing}}
+\doxysubsubsection{\texorpdfstring{get\_cca\_output()}{get\_cca\_output()}}
+{\footnotesize\ttfamily def preprocessing.\+get\+\_\+cca\+\_\+output (\begin{DoxyParamCaption}\item[{}]{image }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Function to return statitics of the rlsa based on connected component analysis
+
+Parameters:
+    image (cv::UMat): image to be processed
+Returns:
+    stats ():
+
+    centroids ():
+\end{DoxyVerb}
+ 
+
+Definition at line 173 of file preprocessing.\+py.
+
+\mbox{\Hypertarget{namespacepreprocessing_ab37eddd2ab27ea7e937fc598842c4647}\label{namespacepreprocessing_ab37eddd2ab27ea7e937fc598842c4647}} 
+\index{preprocessing@{preprocessing}!get\_rlsa\_output@{get\_rlsa\_output}}
+\index{get\_rlsa\_output@{get\_rlsa\_output}!preprocessing@{preprocessing}}
+\doxysubsubsection{\texorpdfstring{get\_rlsa\_output()}{get\_rlsa\_output()}}
+{\footnotesize\ttfamily def preprocessing.\+get\+\_\+rlsa\+\_\+output (\begin{DoxyParamCaption}\item[{}]{image,  }\item[{}]{rlsa\+\_\+param = {\ttfamily 30},  }\item[{}]{type = {\ttfamily \mbox{\hyperlink{namespacepreprocessing_a54455fe31f9a7980c6f866ef8bc9782d}{HORIZONTAL}}} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Return inverted RLSA image, with intensity = rlsa_param
+
+Parameters:
+    image (cv::UMat): image to be processed
+
+    rlsa_param (int): threshold
+Returns:
+    (cv::UMat): image after horizontal RLSA component connection
+        and bitwise NOT operation
+\end{DoxyVerb}
+ 
+
+Definition at line 122 of file preprocessing.\+py.
+
+\mbox{\Hypertarget{namespacepreprocessing_a21e3905a9b155a5c162039cccfa61c92}\label{namespacepreprocessing_a21e3905a9b155a5c162039cccfa61c92}} 
+\index{preprocessing@{preprocessing}!lineRemove@{lineRemove}}
+\index{lineRemove@{lineRemove}!preprocessing@{preprocessing}}
+\doxysubsubsection{\texorpdfstring{lineRemove()}{lineRemove()}}
+{\footnotesize\ttfamily def preprocessing.\+line\+Remove (\begin{DoxyParamCaption}\item[{}]{src,  }\item[{}]{line\+\_\+colour = {\ttfamily \mbox{\hyperlink{namespacepreprocessing_a39da2ac7a2542b44a02e1f55a9ad0151}{WHITE}}} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Use morphology transformations for removing horizontal and vertical lines from image
+
+Parameters:
+    src (image): source image
+Returns:
+    src (image): updated image after line removal
+\end{DoxyVerb}
+ 
+
+Definition at line 38 of file preprocessing.\+py.
+
+\mbox{\Hypertarget{namespacepreprocessing_aa9e44785ac3d7efdf420736e919caa31}\label{namespacepreprocessing_aa9e44785ac3d7efdf420736e919caa31}} 
+\index{preprocessing@{preprocessing}!main@{main}}
+\index{main@{main}!preprocessing@{preprocessing}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily def preprocessing.\+main (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 286 of file preprocessing.\+py.
+
+\mbox{\Hypertarget{namespacepreprocessing_ab3eeaa14e6c207f39c7fee6f9d3183ba}\label{namespacepreprocessing_ab3eeaa14e6c207f39c7fee6f9d3183ba}} 
+\index{preprocessing@{preprocessing}!process@{process}}
+\index{process@{process}!preprocessing@{preprocessing}}
+\doxysubsubsection{\texorpdfstring{process()}{process()}}
+{\footnotesize\ttfamily def preprocessing.\+process (\begin{DoxyParamCaption}\item[{}]{process\+\_\+dict }\end{DoxyParamCaption})}
+
+
+
+Definition at line 232 of file preprocessing.\+py.
+
+\mbox{\Hypertarget{namespacepreprocessing_a515109f3d818660c2b9dd6e482c790b3}\label{namespacepreprocessing_a515109f3d818660c2b9dd6e482c790b3}} 
+\index{preprocessing@{preprocessing}!replaceColourBlocks@{replaceColourBlocks}}
+\index{replaceColourBlocks@{replaceColourBlocks}!preprocessing@{preprocessing}}
+\doxysubsubsection{\texorpdfstring{replaceColourBlocks()}{replaceColourBlocks()}}
+{\footnotesize\ttfamily def preprocessing.\+replace\+Colour\+Blocks (\begin{DoxyParamCaption}\item[{}]{process\+\_\+dict }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Replaces regions of binary image containing coloured heading boxes with light coloured
+text, with corresponding regions of inverse binary image
+
+Parameters:
+    process_dict (dict): image processing data dictionary
+\end{DoxyVerb}
+ 
+
+Definition at line 206 of file preprocessing.\+py.
+
+\mbox{\Hypertarget{namespacepreprocessing_a075248132f8c77300b7b8209d654d98a}\label{namespacepreprocessing_a075248132f8c77300b7b8209d654d98a}} 
+\index{preprocessing@{preprocessing}!showImage@{showImage}}
+\index{showImage@{showImage}!preprocessing@{preprocessing}}
+\doxysubsubsection{\texorpdfstring{showImage()}{showImage()}}
+{\footnotesize\ttfamily def preprocessing.\+show\+Image (\begin{DoxyParamCaption}\item[{}]{winname,  }\item[{}]{image,  }\item[{}]{width = {\ttfamily 700},  }\item[{}]{height = {\ttfamily 700} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Dsiplay the given image on screen, resized to specified dimensions
+
+Parameters:
+    winname (str): window name
+
+    image (cv::UMat): image to be displayed
+\end{DoxyVerb}
+ 
+
+Definition at line 25 of file preprocessing.\+py.
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacepreprocessing_a96abc9c5b3bab46d4b47c4f373b22913}\label{namespacepreprocessing_a96abc9c5b3bab46d4b47c4f373b22913}} 
+\index{preprocessing@{preprocessing}!BLACK@{BLACK}}
+\index{BLACK@{BLACK}!preprocessing@{preprocessing}}
+\doxysubsubsection{\texorpdfstring{BLACK}{BLACK}}
+{\footnotesize\ttfamily tuple preprocessing.\+BLACK = (0, 0, 0)}
+
+
+
+Definition at line 19 of file preprocessing.\+py.
+
+\mbox{\Hypertarget{namespacepreprocessing_a54455fe31f9a7980c6f866ef8bc9782d}\label{namespacepreprocessing_a54455fe31f9a7980c6f866ef8bc9782d}} 
+\index{preprocessing@{preprocessing}!HORIZONTAL@{HORIZONTAL}}
+\index{HORIZONTAL@{HORIZONTAL}!preprocessing@{preprocessing}}
+\doxysubsubsection{\texorpdfstring{HORIZONTAL}{HORIZONTAL}}
+{\footnotesize\ttfamily tuple preprocessing.\+HORIZONTAL = (1, 0)}
+
+
+
+Definition at line 22 of file preprocessing.\+py.
+
+\mbox{\Hypertarget{namespacepreprocessing_a8cb0a604f00e2ef3d7afce5e349ccb64}\label{namespacepreprocessing_a8cb0a604f00e2ef3d7afce5e349ccb64}} 
+\index{preprocessing@{preprocessing}!VERTICAL@{VERTICAL}}
+\index{VERTICAL@{VERTICAL}!preprocessing@{preprocessing}}
+\doxysubsubsection{\texorpdfstring{VERTICAL}{VERTICAL}}
+{\footnotesize\ttfamily tuple preprocessing.\+VERTICAL = (0, 1)}
+
+
+
+Definition at line 23 of file preprocessing.\+py.
+
+\mbox{\Hypertarget{namespacepreprocessing_a39da2ac7a2542b44a02e1f55a9ad0151}\label{namespacepreprocessing_a39da2ac7a2542b44a02e1f55a9ad0151}} 
+\index{preprocessing@{preprocessing}!WHITE@{WHITE}}
+\index{WHITE@{WHITE}!preprocessing@{preprocessing}}
+\doxysubsubsection{\texorpdfstring{WHITE}{WHITE}}
+{\footnotesize\ttfamily tuple preprocessing.\+WHITE = (255, 255, 255)}
+
+
+
+Definition at line 20 of file preprocessing.\+py.
+

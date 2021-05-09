@@ -12,8 +12,10 @@ from multiprocessing import Pool, Process, Pipe
 
 from cropping import getLeftLine,getRightLine
 from hocr_parse import parse_hocr
+from cropping2 import getCropped 
 
 from rlsa import rlsa
+
 
 
 BLACK = (0, 0, 0)
@@ -242,37 +244,39 @@ def process(process_dict):
     process_dict["page_rlsa"] = get_rlsa_output(copy.deepcopy(process_dict["binary"]))
     cv2.imwrite("rlsa.png",cv2.bitwise_not(process_dict["page_rlsa"]))
 
-    stats, centroids = get_cca_output(process_dict["page_rlsa"])
-    block_stats = get_block_stats(stats, centroids)
+    process_dict["cropped"]=getCropped(process_dict)
 
-    block_stats["right"] = block_stats.left + block_stats.width
-    block_stats["bottom"] = block_stats.top + block_stats.height
-    process_dict["block_stats"] = block_stats
+    # stats, centroids = get_cca_output(process_dict["page_rlsa"])
+    # block_stats = get_block_stats(stats, centroids)
 
-    process_dict["top_page"]=10000000
-    process_dict["bottom_page"]=0
-    process_dict["min_block_height"]=30
+    # block_stats["right"] = block_stats.left + block_stats.width
+    # block_stats["bottom"] = block_stats.top + block_stats.height
+    # process_dict["block_stats"] = block_stats
 
-    process_dict["box"]=copy.deepcopy(process_dict["image"])
-    for i in range(len(block_stats)):
+    # process_dict["top_page"]=10000000
+    # process_dict["bottom_page"]=0
+    # process_dict["min_block_height"]=30
+
+    # process_dict["box"]=copy.deepcopy(process_dict["image"])
+    # for i in range(len(block_stats)):
         
-        if(150 > block_stats["height"].iloc[i]> process_dict["min_block_height"]):
-            process_dict["top_page"]=min(process_dict["top_page"],block_stats["top"].iloc[i])
-            process_dict["bottom_page"]=max(process_dict["bottom_page"],block_stats["bottom"].iloc[i])
+    #     if(150 > block_stats["height"].iloc[i]> process_dict["min_block_height"]):
+    #         process_dict["top_page"]=min(process_dict["top_page"],block_stats["top"].iloc[i])
+    #         process_dict["bottom_page"]=max(process_dict["bottom_page"],block_stats["bottom"].iloc[i])
 
-            process_dict["box"]=cv2.rectangle(process_dict["box"],(block_stats["left"].iloc[i],block_stats["top"].iloc[i]),(block_stats["right"].iloc[i],block_stats["bottom"].iloc[i]),(0, 0, 0),thickness=2)
-        # print(block_stats.iloc[i])
+    #         process_dict["box"]=cv2.rectangle(process_dict["box"],(block_stats["left"].iloc[i],block_stats["top"].iloc[i]),(block_stats["right"].iloc[i],block_stats["bottom"].iloc[i]),(0, 0, 0),thickness=2)
+    #     # print(block_stats.iloc[i])
 
 
-    cv2.imwrite("rect.png",process_dict["box"])
+    # cv2.imwrite("rect.png",process_dict["box"])
 
-    process_dict["para_start"] = getLeftLine(process_dict,5)
-    process_dict["para_end"] = getRightLine(process_dict,5)
+    # process_dict["para_start"] = getLeftLine(process_dict,5)
+    # process_dict["para_end"] = getRightLine(process_dict,5)
 
-    print(f"Paragraph start at X-coordinate : {process_dict['para_start']}")
-    print(f"Paragraph end at X-coordinate : {process_dict['para_end']}")
+    # print(f"Paragraph start at X-coordinate : {process_dict['para_start']}")
+    # print(f"Paragraph end at X-coordinate : {process_dict['para_end']}")
     
-    process_dict["cropped"]=process_dict["binary"][process_dict["top_page"]-10:process_dict["bottom_page"],process_dict["para_start"]-10:process_dict["para_end"]+10]
+    # process_dict["cropped"]=process_dict["binary"][process_dict["top_page"]-10:process_dict["bottom_page"],process_dict["para_start"]-10:process_dict["para_end"]+10]
 
     cv2.imwrite("cropped.png",process_dict["cropped"])
 

@@ -1,0 +1,38 @@
+\hypertarget{namespacerlsa}{}\doxysection{rlsa Namespace Reference}
+\label{namespacerlsa}\index{rlsa@{rlsa}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+numpy.\+ndarray \mbox{\hyperlink{namespacerlsa_a59580c212021abac41b181c4751c2ade}{iteration}} (numpy.\+ndarray image, int value)
+\item 
+numpy.\+ndarray \mbox{\hyperlink{namespacerlsa_aaddd89408591fa31a54c8d5c1a8dddf6}{rlsa}} (numpy.\+ndarray image, bool horizontal=True, bool vertical=True, int value=0)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacerlsa_a59580c212021abac41b181c4751c2ade}\label{namespacerlsa_a59580c212021abac41b181c4751c2ade}} 
+\index{rlsa@{rlsa}!iteration@{iteration}}
+\index{iteration@{iteration}!rlsa@{rlsa}}
+\doxysubsubsection{\texorpdfstring{iteration()}{iteration()}}
+{\footnotesize\ttfamily  numpy.\+ndarray rlsa.\+iteration (\begin{DoxyParamCaption}\item[{numpy.\+ndarray}]{image,  }\item[{int}]{value }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}This method iterates over the provided image by converting 255's to 0's if the number of consecutive 255's are
+less the "value" provided
+\end{DoxyVerb}
+ 
+
+Definition at line 3 of file rlsa.\+py.
+
+\mbox{\Hypertarget{namespacerlsa_aaddd89408591fa31a54c8d5c1a8dddf6}\label{namespacerlsa_aaddd89408591fa31a54c8d5c1a8dddf6}} 
+\index{rlsa@{rlsa}!rlsa@{rlsa}}
+\index{rlsa@{rlsa}!rlsa@{rlsa}}
+\doxysubsubsection{\texorpdfstring{rlsa()}{rlsa()}}
+{\footnotesize\ttfamily  numpy.\+ndarray rlsa.\+rlsa (\begin{DoxyParamCaption}\item[{numpy.\+ndarray}]{image,  }\item[{bool }]{horizontal = {\ttfamily True},  }\item[{bool }]{vertical = {\ttfamily True},  }\item[{int }]{value = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}rlsa(RUN LENGTH SMOOTHING ALGORITHM) is to extract the block-of-text or the Region-of-interest(ROI) from the
+document binary Image provided. Must pass binary image of ndarray type.
+\end{DoxyVerb}
+ 
+
+Definition at line 24 of file rlsa.\+py.
+
