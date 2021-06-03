@@ -25,9 +25,9 @@ def get_block_stats(stats, centroids):
 def getCropped(process_dict):
     image = process_dict['page_rlsa']
 
-    rlsa_vertical=rlsa(cv2.bitwise_not(image),False,True,40)
+    rlsa_vertical=rlsa(cv2.bitwise_not(image),False,True,process_dict["image_height"]/80)
 
-    cv2.imwrite("rlsa_vertical.png",rlsa_vertical)
+    cv2.imwrite(f"rlsa_vertical/{process_dict['count']}.png",rlsa_vertical)
 
     _, _, stats, centroids = cv2.connectedComponentsWithStats(cv2.bitwise_not(rlsa_vertical))
 
@@ -61,6 +61,6 @@ def getCropped(process_dict):
 
     box=cv2.rectangle(box,(cropped_left,cropped_top),(cropped_right,cropped_bottom),(0, 0, 0),thickness=4)
 
-    cv2.imwrite("rlsa_rect.png",box)
+    cv2.imwrite(f"rlsa_rect/{process_dict['count']}.png",box)
 
     return process_dict["binary"][cropped_top:cropped_bottom,cropped_left:cropped_right]

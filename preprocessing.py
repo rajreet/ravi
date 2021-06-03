@@ -121,7 +121,7 @@ def lineRemove(src, line_colour=WHITE):
 
     return best_angle, rotated """
 
-def get_rlsa_output(image, rlsa_param=30, type=HORIZONTAL):
+def get_rlsa_output(image, rlsa_param=35, type=HORIZONTAL):
     """
     Return inverted RLSA image, with intensity = rlsa_param
 
@@ -233,16 +233,16 @@ def replaceColourBlocks(process_dict):
 
 def process(process_dict):
     replaceColourBlocks(process_dict)
-    kernel = np.ones((2,2),np.uint8)
+    kernel = np.ones((3,3),np.uint8)
     opening = cv2.morphologyEx(cv2.bitwise_not(process_dict["binary"]), cv2.MORPH_OPEN, kernel)
 
-    cv2.imwrite("before_opening.png",process_dict['binary'])
+    cv2.imwrite(f"before_opening/{process_dict['count']}.png",process_dict['binary'])
 
     process_dict["binary"]=cv2.bitwise_not(opening)
-    cv2.imwrite("binary.png",process_dict["binary"])
+    cv2.imwrite(f"binary/{process_dict['count']}.png",process_dict["binary"])
 
     process_dict["page_rlsa"] = get_rlsa_output(copy.deepcopy(process_dict["binary"]))
-    cv2.imwrite("rlsa.png",cv2.bitwise_not(process_dict["page_rlsa"]))
+    cv2.imwrite(f"rlsa/{process_dict['count']}.png",cv2.bitwise_not(process_dict["page_rlsa"]))
 
     process_dict["cropped"]=getCropped(process_dict)
 
@@ -278,12 +278,12 @@ def process(process_dict):
     
     # process_dict["cropped"]=process_dict["binary"][process_dict["top_page"]-10:process_dict["bottom_page"],process_dict["para_start"]-10:process_dict["para_end"]+10]
 
-    cv2.imwrite("cropped.png",process_dict["cropped"])
+    cv2.imwrite(f"output/{process_dict['count']}.png",process_dict["cropped"])
 
-    os.system("tesseract --dpi 300 cropped.png output_para")
-    print("OCR Done")
+    # os.system("tesseract --dpi 300 cropped.png output_para")
+    # print("OCR Done")
 
-    process_dict["tesseract_hocr_parsed"] = parse_hocr("output_text.hocr")
+    # process_dict["tesseract_hocr_parsed"] = parse_hocr("output_text.hocr")
     
     return process_dict
 
