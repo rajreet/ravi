@@ -236,7 +236,7 @@ def process(process_dict):
     kernel = np.ones((2,2),np.uint8)
     opening = cv2.morphologyEx(cv2.bitwise_not(process_dict["binary"]), cv2.MORPH_OPEN, kernel)
 
-    # cv2.imwrite("opening.png",cv2.bitwise_not(opening))
+    cv2.imwrite("before_opening.png",process_dict['binary'])
 
     process_dict["binary"]=cv2.bitwise_not(opening)
     cv2.imwrite("binary.png",process_dict["binary"])
